@@ -1,0 +1,40 @@
+{
+  "name": "golem-docker",
+  "version": "1.0.0",
+  "description": "An unique and awesome application that runs on Golem Network",
+  "type": "commonjs",
+  "main": "src/index.ts",
+  "bin": {
+    "docker-on-golem": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier -w ."
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [
+    "golem",
+    "network",
+    "application"
+  ],
+  "dependencies": {
+    "@golem-sdk/golem-js": "^3.0.1",
+    "canonicalize": "^2.0.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.4.5",
+    "elliptic": "^6.5.5",
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/elliptic": "^6.4.18",
+    "@types/node": "^20.14.10",
+    "@types/prompt-sync": "^4.2.3",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.3"
+  }
+}
