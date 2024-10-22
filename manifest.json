@@ -1,0 +1,33 @@
+{
+  "version": "0.1.0",
+  "createdAt": "2024-08-02T13:43:27.882+02:00",
+  "expiresAt": "2024-10-31T13:43:27.882+01:00",
+  "metadata": {
+    "name": "golem-docker",
+    "description": "An unique and awesome application that runs on Golem Network",
+    "version": "1.0.0"
+  },
+  "payload": [
+    {
+      "platform": {
+        "os": "linux",
+        "arch": "x86_64"
+      },
+      "hash": "sha3:ac7a4821b78f62e6221dcb28844460e65b8d60c7a8e18cf8fa6632e7",
+      "urls": [
+        "http://registry.golem.network/download/07de54fa84860a8036fbeafe59742dda39ac2f65d7736e84fc6c898369c341d6"
+      ]
+    }
+  ],
+  "compManifest": {
+    "version": "0.1.0",
+    "net": {
+      "inet": {
+        "out": {
+          "urls": ["https://registry-1.docker.io"],
+          "protocols": ["http", "https", "ws", "wss"]
+        }
+      }
+    }
+  }
+}

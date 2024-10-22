@@ -1,5 +1,14 @@
 # Docker on Golem
 
+<!-- TOC -->
+* [Docker on Golem](#docker-on-golem)
+  * [About this project](#about-this-project)
+  * [How to use it (as a Requestor)?](#how-to-use-it-as-a-requestor)
+  * [How can I join the project as a Provider?](#how-can-i-join-the-project-as-a-provider)
+    * [Provider Requirements](#provider-requirements)
+    * [Add outbound URLs to whitelist](#add-outbound-urls-to-whitelist)
+<!-- TOC -->
+
 ## About this project
 
 This project aims to build up a docker swarm that will utilize the resources rented from Providers available within the Golem Network.
@@ -14,6 +23,8 @@ THe general idea is that as a user of this project, you should be able to:
 ## How to use it (as a Requestor)?
 
 ...
+
+## Insallation
 
 ## How can I join the project as a Provider?
 

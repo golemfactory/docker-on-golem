@@ -1,7 +1,7 @@
 {
-  "name": "golem-docker",
-  "version": "1.0.0",
-  "description": "An unique and awesome application that runs on Golem Network",
+  "name": "docker-on-golem",
+  "version": "0.1.0",
+  "description": "A CLI utility that deploys Docker Swarm on top of Golem Network",
   "type": "commonjs",
   "main": "src/index.ts",
   "bin": {
@@ -14,12 +14,20 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier -w ."
   },
-  "author": "",
-  "license": "ISC",
+  "author": "GolemFactory <contact@golem.network>",
+  "license": "LGPL-3.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [
     "golem",
     "network",
-    "application"
+    "docekr",
+    "swarm",
+    "cluster",
+    "dsitributed",
+    "computation",
+    "network"
   ],
   "dependencies": {
     "@golem-sdk/golem-js": "^3.4.3",
