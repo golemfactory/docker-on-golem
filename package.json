@@ -1,6 +1,6 @@
 {
   "name": "docker-on-golem",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A CLI utility that deploys Docker Swarm on top of Golem Network",
   "type": "commonjs",
   "main": "src/index.ts",
