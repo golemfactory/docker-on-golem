@@ -24,4 +24,10 @@ In order to become a Provider that's eligible (selectable), you will have to add
 - Runtime name: `vm`
 - Runtime version: `0.4.2`
 
+### Add outbound URLs to whitelist
+
+```bash
+ya-provider whitelist add -p registry-1.docker.io -t strict
+```
+
 ...
