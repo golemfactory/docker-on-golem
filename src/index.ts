@@ -6,10 +6,18 @@ import {
   GolemNetwork,
   MarketOrderSpec,
   ResourceRental,
+  waitFor,
 } from "@golem-sdk/golem-js";
-import { runOrFail, waitFor } from "./utils";
+import { runOrFail } from "./utils";
 import { printFundingRequest } from "./funding";
-import { acceptOperator } from "./filters";
+import fs from "fs";
+
+/**
+ * @link https://github.com/golemfactory/yagna-docs/blob/master/requestor-tutorials/vm-runtime/computation-payload-manifest.schema.json
+ */
+function readAndEncodeManifest() {
+  return fs.readFileSync("./manifest.json").toString("base64");
+}
 
 (async () => {
   const LOCAL_PROXY_PORT = 3375;
@@ -18,10 +26,18 @@ import { acceptOperator } from "./filters";
   const abort = new AbortController();
   console.log(chalk.green("Running with PID"), process.pid);
 
-  const glm = new GolemNetwork();
+  const glm = new GolemNetwork({
+    payment: {
+      network: "polygon",
+    },
+  });
 
   try {
     await glm.connect();
+
+    glm.market.events.on("offerCounterProposalRejected", (event) => {
+      console.log("Got my proposal rejected", event.reason);
+    });
 
     const network = await glm.createNetwork({
       ip: "192.168.7.0/24",
@@ -29,7 +45,15 @@ import { acceptOperator } from "./filters";
 
     const order: MarketOrderSpec = {
       demand: {
-        workload: { imageTag: "golem/docker:27", minMemGib: 2 },
+        workload: {
+          imageTag: "golem/docker:27",
+          minMemGib: 2,
+          // manifest: readAndEncodeManifest(),
+          runtime: {
+            name: "vm",
+            version: "0.4.2",
+          },
+        },
       },
       market: {
         // 15 minutes
@@ -48,7 +72,7 @@ import { acceptOperator } from "./filters";
 
     process.on("SIGINT", () => {
       (async () => {
-        console.log(chalk.yellow("Shutting down"));
+        console.log(chalk.yellow("Shutting down, my PID is", process.pid));
         abort.abort("SIGINT called");
         await rental?.stopAndFinalize();
         await glm.disconnect();
