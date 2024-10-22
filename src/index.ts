@@ -2,14 +2,15 @@
 
 import "dotenv/config";
 import chalk from "chalk";
+
 import {
   GolemNetwork,
   MarketOrderSpec,
   ResourceRental,
   waitFor,
 } from "@golem-sdk/golem-js";
+
 import { runOrFail } from "./utils";
-import { printFundingRequest } from "./funding";
 import fs from "fs";
 
 /**
@@ -218,19 +219,9 @@ function readAndEncodeManifest() {
     //       .catch((err) => console.error("! %s", err));
     //   }
     // }
-
-    console.log(
-      "Contents of /var/lib/docker",
-      await runOrFail(exe, "ls -al /var/lib/docker"),
-    );
-    console.log(
-      "Contents of /var/run/docker",
-      await runOrFail(exe, "ls -al /var/run/docker"),
-    );
   } catch (err: any) {
     console.error(chalk.bgRed("Something went wrong: %s"), err.message ?? err);
   } finally {
     await glm.disconnect();
-    printFundingRequest();
   }
 })().catch(console.error);
