@@ -1,15 +1,16 @@
 # Docker on Golem
 
 <!-- TOC -->
-* [Docker on Golem](#docker-on-golem)
-  * [About this project](#about-this-project)
-  * [How to use it (as a Requestor)?](#how-to-use-it-as-a-requestor)
-    * [Installation](#installation)
-    * [Usage](#usage)
-  * [How can I join the project as a Provider?](#how-can-i-join-the-project-as-a-provider)
-    * [Provider Requirements](#provider-requirements)
-    * [Add outbound URLs to whitelist](#add-outbound-urls-to-whitelist)
-<!-- TOC -->
+
+- [Docker on Golem](#docker-on-golem)
+  - [About this project](#about-this-project)
+  - [How to use it (as a Requestor)?](#how-to-use-it-as-a-requestor)
+    - [Installation](#installation)
+    - [Usage](#usage)
+  - [How can I join the project as a Provider?](#how-can-i-join-the-project-as-a-provider)
+  _ [Provider Requirements](#provider-requirements)
+  _ [Add outbound URLs to whitelist](#add-outbound-urls-to-whitelist)
+  <!-- TOC -->
 
 ## About this project
 
@@ -32,12 +33,19 @@ After you have installed yagna on your system by following the [official install
 npm i -g docker-on-golem@latest
 ```
 
+Once you installed the tool, you can explore the available options using the help command
+
+```bash
+docker-on-golem --help
+```
+
 ### Usage
 
 You can deploy your Docker Swarm using the following command:
 
 ```bash
-// TBD
+docker-on-golem -k [your-yagna-app-key]
+# You can use more options to fine tune the setup, check --help to explore the possibilities
 ```
 
 Then, you can add a new docker context to your local docker configuration, to point the CLI to the swarm deployed on top of Golem Network:
