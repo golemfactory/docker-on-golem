@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
   "createdAt": "2024-08-02T13:43:27.882+02:00",
-  "expiresAt": "2024-10-31T13:43:27.882+01:00",
+  "expiresAt": "2025-10-31T13:43:27.882+01:00",
   "metadata": {
     "name": "golem-docker",
     "description": "An unique and awesome application that runs on Golem Network",
