@@ -3,10 +3,12 @@
 import "dotenv/config";
 import { main } from "./actions/main";
 import { Command, Option } from "commander";
+import pkg from "../package.json";
 
 const program = new Command("docker-on-golem");
 
 program
+  .version(pkg.version)
   .option(
     "-r, --spend-rate <amount>",
     "The GLM/h rate you want to spend on the cluster",

@@ -7,12 +7,13 @@ import {
 } from "@golem-sdk/golem-js";
 import { runOrFail } from "../utils";
 import fs from "node:fs";
+import path from "node:path";
 
 /**
  * @link https://github.com/golemfactory/yagna-docs/blob/master/requestor-tutorials/vm-runtime/computation-payload-manifest.schema.json
  */
 function readAndEncodeManifest() {
-  return fs.readFileSync("./manifest.json").toString("base64");
+  return fs.readFileSync(fs.realpathSync(path.join(__dirname, "../../manifest.json"))).toString("base64");
 }
 
 export type MainActionOpts = {
@@ -67,7 +68,7 @@ export const main = async (opts: MainActionOpts) => {
         workload: {
           imageTag: "golem/docker:27",
           minMemGib: 2,
-          // manifest: readAndEncodeManifest(),
+          manifest: readAndEncodeManifest(),
           runtime: {
             name: "vm",
             version: "0.4.2",
@@ -174,6 +175,8 @@ export const main = async (opts: MainActionOpts) => {
       complete: () => console.log("Finished STDOUT"),
     });
 
+    let daemonReady = false;
+
     proc.stderr.subscribe({
       next: (stderr) => {
         stderr
@@ -194,11 +197,21 @@ export const main = async (opts: MainActionOpts) => {
             } else {
               console.error(chalk.red("dockerd ERROR %s"), line);
             }
+
+            if (line.includes("API listen on [::]:2375")) {
+              daemonReady = true;
+            }
           });
       },
       error: (err) => console.error("Failed to subscribe to STDERR", err),
       complete: () => console.log("Finished STDERR"),
     });
+
+    console.log(chalk.green("Waiting for Docker daemon to become available on the Provider"));
+    await waitFor(() => daemonReady, {
+      abortSignal: abort.signal,
+    })
+    console.log(chalk.green("Daemon seems to be online"));
 
     const proxy = exe.createTcpProxy(DOCKERD_LISTEN_PORT);
 
@@ -206,7 +219,7 @@ export const main = async (opts: MainActionOpts) => {
       .listen(LOCAL_PROXY_PORT, abort)
       .then(() => {
         console.log(
-          chalk.green(`Started TCP proxy on port ${LOCAL_PROXY_PORT}.'`),
+          chalk.green(`Started TCP proxy on port ${LOCAL_PROXY_PORT}'`),
         );
         console.log(
           chalk.green(
@@ -223,19 +236,6 @@ export const main = async (opts: MainActionOpts) => {
     await waitFor(() => proc.isFinished(), {
       abortSignal: abort.signal,
     });
-
-    // const prompt = promptSync();
-    //
-    // let value;
-    // while (value = prompt("golem < ")) {
-    //   if (value === '\quit') {
-    //     abort.abort("User called 'quit'");
-    //   } else {
-    //     runOrFail(exe, value)
-    //       .then((output) => console.log("> %s", output))
-    //       .catch((err) => console.error("! %s", err));
-    //   }
-    // }
   } catch (err: any) {
     console.error(chalk.bgRed("Something went wrong: %s"), err.message ?? err);
   } finally {
