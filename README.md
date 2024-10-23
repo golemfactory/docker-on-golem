@@ -69,7 +69,20 @@ You should now be able to use `docker`, `docker compose`, or `docker stack` in t
 Add outbound URLs to the whitelist:
 
 ```bash
+# Allow internet access to everyone, but restricted to the whitelist
+ya-provider rule set outbound everyone --mode whitelist
+# Add the Docker registry to the whitelist
 ya-provider whitelist add -p registry-1.docker.io -t strict
+```
+
+You can check if everything is set with these commands
+
+```bash
+# Here, you should see the Everyone/whitelist entry
+ya-provider rule list
+
+# Here you should see the entry on the whitelist
+ya-provider whitelist list
 ```
 
 [yagna-install-guide]: https://docs.golem.network/docs/quickstarts/js-quickstart#installing-and-running-yagna-4

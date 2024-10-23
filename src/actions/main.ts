@@ -45,7 +45,7 @@ export const main = async (opts: MainActionOpts) => {
     await glm.connect();
 
     glm.market.events.on("offerCounterProposalRejected", (event) => {
-      console.log("Got my proposal rejected", event.reason);
+      console.log("Got my proposal rejected", event.reason, event.counterProposal.properties);
     });
 
     const network = await glm.createNetwork({
