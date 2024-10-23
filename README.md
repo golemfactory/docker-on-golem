@@ -3,13 +3,13 @@
 <!-- TOC -->
 
 - [Docker on Golem](#docker-on-golem)
-    - [About this project](#about-this-project)
-    - [Usage Guide](#usage-guide)
-        - [Installation](#installation)
-        - [Deployment](#deployment)
-    - [Provider Information](#provider-information)
-        - [Requirements](#requirements)
-        - [Whitelist Configuration](#whitelist-configuration)
+  - [About this project](#about-this-project)
+  - [Usage Guide](#usage-guide)
+    - [Installation](#installation)
+    - [Deployment](#deployment)
+  - [Provider Information](#provider-information)
+    - [Requirements](#requirements)
+    - [Whitelist Configuration](#whitelist-configuration)
 
 <!-- TOC -->
 
@@ -71,6 +71,7 @@ Add outbound URLs to the whitelist:
 ```bash
 # Allow internet access to everyone, but restricted to the whitelist
 ya-provider rule set outbound everyone --mode whitelist
+
 # Add the Docker registry to the whitelist
 ya-provider whitelist add -p registry-1.docker.io -t strict
 ```

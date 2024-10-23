@@ -13,7 +13,9 @@ import path from "node:path";
  * @link https://github.com/golemfactory/yagna-docs/blob/master/requestor-tutorials/vm-runtime/computation-payload-manifest.schema.json
  */
 function readAndEncodeManifest() {
-  return fs.readFileSync(fs.realpathSync(path.join(__dirname, "../../manifest.json"))).toString("base64");
+  return fs
+    .readFileSync(fs.realpathSync(path.join(__dirname, "../../manifest.json")))
+    .toString("base64");
 }
 
 export type MainActionOpts = {
@@ -22,6 +24,7 @@ export type MainActionOpts = {
   golemApiUrl: string;
   golemApiKey: string;
   port: string;
+  verbose: boolean;
 };
 
 export const main = async (opts: MainActionOpts) => {
@@ -45,7 +48,7 @@ export const main = async (opts: MainActionOpts) => {
     await glm.connect();
 
     glm.market.events.on("offerCounterProposalRejected", (event) => {
-      console.log("Got my proposal rejected", event.reason, event.counterProposal.properties);
+      console.log("Got my proposal rejected", event.reason);
     });
 
     const network = await glm.createNetwork({
@@ -103,12 +106,24 @@ export const main = async (opts: MainActionOpts) => {
       order,
     });
 
-    const providerName = rental.agreement.provider.name;
+    const {
+      name: providerName,
+      id: providerId,
+      walletAddress: operatorId,
+    } = rental.agreement.provider;
 
     console.log(
-      chalk.green("Rented resources from %s, will now deploy image"),
+      chalk.green(
+        "Rented resources from %s (id: %s, operator: %s), will now deploy image",
+      ),
       providerName,
+      providerId,
+      operatorId,
     );
+
+    rental.events.once("finalized", () => {
+      chalk.green("Rental from %s (id: %s, operator: %s) has been finalized");
+    });
 
     const exe = await rental.getExeUnit();
     console.log(chalk.green("Image deployed"));
@@ -169,8 +184,11 @@ export const main = async (opts: MainActionOpts) => {
     );
 
     proc.stdout.subscribe({
-      next: (stdout) =>
-        console.log("dockerd >>> %s", stdout?.toString().trim()),
+      next: (stdout) => {
+        if (opts.verbose) {
+          console.log("dockerd >>> %s", stdout?.toString().trim());
+        }
+      },
       error: (err) => console.error("Failed to subscribe to STDOUT", err),
       complete: () => console.log("Finished STDOUT"),
     });
@@ -184,18 +202,20 @@ export const main = async (opts: MainActionOpts) => {
           .trim()
           .split("\n")
           .forEach((line) => {
-            if (line.includes("level=info")) {
-              console.error(
-                chalk.blue("dockerd INFO %s"),
-                line.replace("level=info", ""),
-              );
-            } else if (line.includes("level=warning")) {
-              console.error(
-                chalk.yellow("dockerd WARN %s"),
-                line.replace("level=warning", ""),
-              );
-            } else {
-              console.error(chalk.red("dockerd ERROR %s"), line);
+            if (opts.verbose) {
+              if (line.includes("level=info")) {
+                console.error(
+                  chalk.blue("dockerd INFO %s"),
+                  line.replace("level=info", ""),
+                );
+              } else if (line.includes("level=warning")) {
+                console.error(
+                  chalk.yellow("dockerd WARN %s"),
+                  line.replace("level=warning", ""),
+                );
+              } else {
+                console.error(chalk.red("dockerd ERROR %s"), line);
+              }
             }
 
             if (line.includes("API listen on [::]:2375")) {
@@ -207,10 +227,14 @@ export const main = async (opts: MainActionOpts) => {
       complete: () => console.log("Finished STDERR"),
     });
 
-    console.log(chalk.green("Waiting for Docker daemon to become available on the Provider"));
+    console.log(
+      chalk.green(
+        "Waiting for Docker daemon to become available on the Provider",
+      ),
+    );
     await waitFor(() => daemonReady, {
       abortSignal: abort.signal,
-    })
+    });
     console.log(chalk.green("Daemon seems to be online"));
 
     const proxy = exe.createTcpProxy(DOCKERD_LISTEN_PORT);
@@ -219,7 +243,7 @@ export const main = async (opts: MainActionOpts) => {
       .listen(LOCAL_PROXY_PORT, abort)
       .then(() => {
         console.log(
-          chalk.green(`Started TCP proxy on port ${LOCAL_PROXY_PORT}'`),
+          chalk.green(`Started TCP proxy on port ${LOCAL_PROXY_PORT}`),
         );
         console.log(
           chalk.green(

@@ -9,6 +9,16 @@ const program = new Command("docker-on-golem");
 
 program
   .version(pkg.version)
+  .addOption(
+    new Option("-k, --golem-api-key <key>", "The yagna app-key to use")
+      .env("YAGNA_APP_KEY")
+      .makeOptionMandatory(),
+  )
+  .addOption(
+    new Option("-h, --golem-api-url <url>", "The URL to the yagna to use")
+      .default("http://localhost:7465")
+      .env("YAGNA_URL"),
+  )
   .option(
     "-r, --spend-rate <amount>",
     "The GLM/h rate you want to spend on the cluster",
@@ -24,16 +34,7 @@ program
     "Local proxy port that will be used to expose the docker API hosted on Golem Network",
     "3375",
   )
-  .addOption(
-    new Option("-h, --golem-api-url <url>", "The URL to the yagna to use")
-      .default("http://localhost:7465")
-      .env("YAGNA_URL"),
-  )
-  .addOption(
-    new Option("-k, --golem-api-key <key>", "The yagna app-key to use")
-      .env("YAGNA_APP_KEY")
-      .makeOptionMandatory(),
-  )
+  .option("--verbose", "Produce verbose output (useful for debugging)", false)
   .action(main);
 
 program.parse();
