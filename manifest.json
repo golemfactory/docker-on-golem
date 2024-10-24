@@ -24,7 +24,7 @@
     "net": {
       "inet": {
         "out": {
-          "urls": ["https://registry-1.docker.io"],
+          "urls": ["https://registry-1.docker.io", "https://production.cloudflare.docker.com"],
           "protocols": ["http", "https", "ws", "wss"]
         }
       }

@@ -32,6 +32,12 @@ export function buildMainCommand() {
       "3375",
     )
     .option("--verbose", "Produce verbose output (useful for debugging)", false)
+    .addOption(
+      new Option(
+        "--collaborator-config <file>",
+        "Point the place of the file containing information about collaborating providers and operators",
+      ),
+    )
     .action(main);
 
   return cmd;

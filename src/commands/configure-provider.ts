@@ -48,9 +48,7 @@ function informWhitelistRequirements() {
   );
 
   WHITELIST_ADD.map((entry) =>
-    console.log(
-      `+ [ ] ${chalk.green(entry.value)} (${chalk.green(entry.mode)})`,
-    ),
+    console.log(`+ ${chalk.green(entry.value)} (${chalk.green(entry.mode)})`),
   );
 }
 
@@ -62,9 +60,7 @@ function informOutboundRequirements() {
   );
 
   OUTBOUND_RULE_ADD.map((entry) =>
-    console.log(
-      `+ [ ] ${chalk.green(entry.rule)} -> ${chalk.green(entry.mode)}`,
-    ),
+    console.log(`+ ${chalk.green(entry.rule)} -> ${chalk.green(entry.mode)}`),
   );
 }
 

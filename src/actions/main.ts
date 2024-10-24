@@ -2,12 +2,14 @@ import chalk from "chalk";
 import {
   GolemNetwork,
   MarketOrderSpec,
+  OfferProposalFilter,
   ResourceRental,
   waitFor,
 } from "@golem-sdk/golem-js";
 import { runOrFail } from "../utils";
 import fs from "node:fs";
 import path from "node:path";
+import { acceptAll, anyOfPassing } from "../lib/filter";
 
 /**
  * @link https://github.com/golemfactory/yagna-docs/blob/master/requestor-tutorials/vm-runtime/computation-payload-manifest.schema.json
@@ -25,6 +27,12 @@ export type MainActionOpts = {
   golemApiKey: string;
   port: string;
   verbose: boolean;
+  collaboratorConfig?: string;
+};
+
+export type CollaboratorFileContents = {
+  operators: string[];
+  providers: string[];
 };
 
 export const main = async (opts: MainActionOpts) => {
@@ -34,6 +42,36 @@ export const main = async (opts: MainActionOpts) => {
   const abort = new AbortController();
   console.log(chalk.green("Running with PID"), process.pid);
 
+  const filters: OfferProposalFilter[] = [];
+
+  if (opts.collaboratorConfig) {
+    const contents: CollaboratorFileContents = JSON.parse(
+      fs.readFileSync(opts.collaboratorConfig, "utf8").toString(),
+    );
+
+    console.log(
+      "Loaded collaborator list from file %s",
+      opts.collaboratorConfig,
+    );
+
+    if (contents.providers) {
+      console.log(
+        "The config contains %d provider IDs",
+        contents.providers.length,
+      );
+      filters.push((offer) => contents.providers.includes(offer.provider.id));
+    }
+
+    if (contents.operators) {
+      console.log(
+        "The config contains %s operator IDs",
+        contents.operators.length,
+      );
+      filters.push((offer) =>
+        contents.operators.includes(offer.provider.walletAddress),
+      );
+    }
+  }
   const glm = new GolemNetwork({
     api: {
       key: opts.golemApiKey,
@@ -85,8 +123,8 @@ export const main = async (opts: MainActionOpts) => {
           model: "burn-rate",
           avgGlmPerHour: spendRate,
         },
-        offerProposalFilter: (proposal) =>
-          proposal.provider.id === "0x37f0c1247da486729b0abbde51327616f7b4ee92",
+        offerProposalFilter:
+          filters.length > 0 ? anyOfPassing(filters) : acceptAll,
       },
       network,
     };
