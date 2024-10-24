@@ -28,12 +28,12 @@ export class YaProvider {
   }
 
   public addWhitelistPattern(value: string, type: WhitelistPatternType) {
-    this.callProvider(`whitelist add --patterns ${value} -t ${type}`);
+    this.callProvider(`whitelist add --patterns "${value}" -t "${type}"`);
     return this.getWhitelist();
   }
 
   public removeWhitelistPattern(id: string) {
-    this.callProvider(`whitelist remove ${id}`);
+    this.callProvider(`whitelist remove "${id}"`);
     return this.getWhitelist();
   }
 
