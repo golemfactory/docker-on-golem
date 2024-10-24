@@ -5,7 +5,7 @@
   "type": "commonjs",
   "main": "src/index.ts",
   "bin": {
-    "docker-on-golem": "dist/index.js"
+    "docker-on-golem": "dist/src/index.js"
   },
   "scripts": {
     "build": "tsc",
