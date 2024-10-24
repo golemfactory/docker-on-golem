@@ -85,7 +85,8 @@ export const main = async (opts: MainActionOpts) => {
           model: "burn-rate",
           avgGlmPerHour: spendRate,
         },
-        // offerProposalFilter: acceptOperator,
+        offerProposalFilter: (proposal) =>
+          proposal.provider.id === "0x37f0c1247da486729b0abbde51327616f7b4ee92",
       },
       network,
     };

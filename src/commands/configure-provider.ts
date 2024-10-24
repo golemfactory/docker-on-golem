@@ -22,11 +22,7 @@ const WHITELIST_REMOVE: WhitelistEntry[] = [
 
 const WHITELIST_ADD: WhitelistEntry[] = [
   {
-    value: "*.docker.io",
-    mode: "regex",
-  },
-  {
-    value: "*.docker.com",
+    value: "(.*)\\.docker\\.(io|com)$",
     mode: "regex",
   },
 ];
