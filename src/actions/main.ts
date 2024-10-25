@@ -170,6 +170,18 @@ export const main = async (opts: MainActionOpts) => {
     // Configure the hostname
     await runOrFail(exe, `hostname ${providerName}`);
 
+    // Test important URLs from te manifest
+    const urls = [
+      "https://registry-1.docker.io",
+      "https://production.cloudflare.docker.com",
+    ];
+
+    console.log("Testing internet access...");
+    for (const url of urls) {
+      const result = await runOrFail(exe, `curl --head ${url}`);
+      console.log(`Result for ${url}: ${result}`);
+    }
+
     // Prepare place for artifacts
     await runOrFail(exe, `mount -t tmpfs -o size=1g none /var/lib/docker`);
     await runOrFail(exe, "mkdir /var/run/docker");

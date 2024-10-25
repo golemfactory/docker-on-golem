@@ -3,7 +3,7 @@
   "createdAt": "2024-08-02T13:43:27.882+02:00",
   "expiresAt": "2025-10-31T13:43:27.882+01:00",
   "metadata": {
-    "name": "golem-docker",
+    "name": "docker-on-golem",
     "description": "An unique and awesome application that runs on Golem Network",
     "version": "1.0.0"
   },
@@ -13,9 +13,9 @@
         "os": "linux",
         "arch": "x86_64"
       },
-      "hash": "sha3:ac7a4821b78f62e6221dcb28844460e65b8d60c7a8e18cf8fa6632e7",
+      "hash": "sha3:e07a19d75996c7377ba4ffc1a600a43f7fa54e1f6463dee06b995e58",
       "urls": [
-        "http://registry.golem.network/download/07de54fa84860a8036fbeafe59742dda39ac2f65d7736e84fc6c898369c341d6"
+        "http://registry.golem.network/download/3997a8f9fd88c130f239f75d7957d8bc5f44caf7cfc5f1227765d853b5eb1d64"
       ]
     }
   ],
@@ -24,7 +24,10 @@
     "net": {
       "inet": {
         "out": {
-          "urls": ["https://registry-1.docker.io", "https://production.cloudflare.docker.com"],
+          "urls": [
+            "https://registry-1.docker.io",
+            "https://production.cloudflare.docker.com"
+          ],
           "protocols": ["http", "https", "ws", "wss"]
         }
       }
